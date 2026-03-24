@@ -8,7 +8,7 @@ export default async function Page() {
   return (
     <div className="p-5 grid grid-cols-3 gap-4">
       <Link href="/journal/new">
-        <EntryCard title="Sample Entry" content="This is a sample entry." />
+        <EntryCard title="Add New Entry" content="" />
       </Link>
       {entries?.map((entry) => (
         <EntryCard key={entry.id} title={entry.title} content={entry.content} />
