@@ -1,5 +1,4 @@
-import { ClerkProvider, UserButton } from '@clerk/nextjs';
-import { ui } from '@clerk/ui';
+import { ClerkProvider } from '@clerk/nextjs';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
@@ -27,15 +26,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-        <body className="min-h-full flex flex-col bg-linear-to-b from-amber-200 to-amber-400">
-          <header className="p-4">
-            <nav className="flex justify-between items-center max-w-7xl mx-auto">
-              <span className="font-black tracking-tighter uppercase">Journal</span>
-              <UserButton />
-            </nav>
-          </header>
-          <main className="flex-1 flex flex-col">{children}</main>
-        </body>
+        <body className="min-h-full flex flex-col bg-white">{children}</body>
       </html>
     </ClerkProvider>
   );
