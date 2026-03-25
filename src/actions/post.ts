@@ -41,3 +41,53 @@ export async function createEntry(formData: FormData) {
   revalidatePath('/journal');
   redirect('/journal');
 }
+
+export async function updateEntry(formData: FormData) {
+  const { userId } = await auth();
+
+  try {
+    if (!userId) {
+      return;
+    }
+
+    const user = await db.user.findUnique({
+      where: {
+        clerkId: userId,
+      },
+    });
+
+    if (!user) {
+      return;
+    }
+
+    const id = formData.get('id') as string;
+    const title = formData.get('title') as string;
+    const content = formData.get('content') as string;
+
+    const existingEntry = await db.entry.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!existingEntry || existingEntry.userId !== user.id) {
+      throw new Error('Entry not found or not authorized.');
+    }
+
+    await db.entry.update({
+      where: {
+        id,
+      },
+      data: {
+        title,
+        content,
+      },
+    });
+  } catch (error) {
+    console.error('Error updating entry:', error);
+    throw new Error('Failed to update entry. Please try again.');
+  }
+
+  revalidatePath('/journal');
+  redirect('/journal');
+}
