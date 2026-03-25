@@ -1,4 +1,4 @@
-import NewEntryCard from '../../../../components/NewEntryCard';
+import NewEntryCard from '@/components/NewEntryCard';
 
 export default function Page() {
   return (

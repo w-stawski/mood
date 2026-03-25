@@ -1,4 +1,4 @@
-import { createEntry } from '../actions/post';
+import { createEntry } from '@/actions/post';
 
 export default function NewEntryCard() {
   return (

@@ -3,7 +3,7 @@
 import { auth } from '@clerk/nextjs/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import db from '../utils/db';
+import db from '@/utils/db';
 
 export async function createEntry(formData: FormData) {
   const { userId } = await auth();
