@@ -26,13 +26,14 @@ export async function createEntry(formData: FormData) {
     const title = formData.get('title') as string;
     const content = formData.get('content') as string;
 
-    await db.entry.create({
+    const resp = await db.entry.create({
       data: {
         title,
         content,
         userId: user.id,
       },
     });
+    console.log(resp, 'post add success');
 
     revalidatePath('/journal');
     redirect('/journal');
