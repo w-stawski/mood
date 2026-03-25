@@ -1,5 +1,6 @@
-import Link from 'next/link';
+import { getUserByClerkId } from '@/utils/auth';
 import db from '@/utils/db';
+import Link from 'next/link';
 
 function formatDate(date: Date | null | undefined): string {
   if (!date) return '';
@@ -14,14 +15,21 @@ function formatDate(date: Date | null | undefined): string {
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = await params;
+  const user = await getUserByClerkId();
+  const userId = user?.id;
 
   let entry = null;
   let error = null;
 
   try {
+    if (!userId) {
+      error = 'Unauthorized';
+      throw new Error('User not authenticated');
+    }
     entry = await db.entry.findUnique({
       where: {
         id,
+        userId,
       },
       include: {
         analisis: true,
@@ -83,7 +91,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
           {/* Analysis Section */}
           {entry?.analisis && (
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-t border-slate-200 px-8 py-6">
+            <div className="bg-linear-to-r from-blue-50 to-indigo-50 border-t border-slate-200 px-8 py-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <h3 className="text-sm font-semibold text-slate-600 uppercase tracking-wide mb-2">Mood</h3>
