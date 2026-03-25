@@ -8,7 +8,7 @@ export default function Page() {
         <p className="text-gray-500">Welcome back! Please sign in to continue.</p>
       </div>
       <div className="w-full max-w-md bg-white p-2 rounded-2xl shadow-xl shadow-blue-100/50">
-        <SignIn forceRedirectUrl="/new-user" />
+        <SignIn />
       </div>
     </div>
   );

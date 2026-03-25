@@ -8,7 +8,7 @@ export default function Page() {
         <p className="text-gray-500">Join us to start tracking your thoughts.</p>
       </div>
       <div className="w-full max-w-md bg-white p-2 rounded-2xl shadow-xl shadow-blue-100/50">
-        <SignUp forceRedirectUrl="/new-user" />
+        <SignUp />
       </div>
     </div>
   );

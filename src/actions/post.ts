@@ -1,9 +1,9 @@
 'use server';
 
 import { auth } from '@clerk/nextjs/server';
-import db from '../utils/db';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import db from '../utils/db';
 
 export async function createEntry(formData: FormData) {
   const { userId } = await auth();
@@ -26,19 +26,18 @@ export async function createEntry(formData: FormData) {
     const title = formData.get('title') as string;
     const content = formData.get('content') as string;
 
-    const resp = await db.entry.create({
+    await db.entry.create({
       data: {
         title,
         content,
         userId: user.id,
       },
     });
-    console.log(resp, 'post add success');
-
-    revalidatePath('/journal');
-    redirect('/journal');
   } catch (error) {
     console.error('Error creating entry:', error);
     throw new Error('Failed to create entry. Please try again.');
   }
+
+  revalidatePath('/journal');
+  redirect('/journal');
 }
