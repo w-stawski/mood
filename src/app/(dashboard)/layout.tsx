@@ -1,5 +1,5 @@
 import { UserButton } from '@clerk/nextjs';
-import { Home, NotebookPen, LogOut } from 'lucide-react';
+import { Home, NotebookPen } from 'lucide-react';
 import Link from 'next/link';
 
 const links = [

@@ -25,7 +25,7 @@ model Entry {
   user      User      @relation(fields: [userId], references: [id])
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  analisis  Analysis?
+  analysis  Analysis?
 }
 
 model Analysis {
@@ -33,7 +33,8 @@ model Analysis {
   entryId   String   @unique
   entry     Entry    @relation(fields: [entryId], references: [id])
   summary   String
-  mood      String
+  feedback  String
+  mood      Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
