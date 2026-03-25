@@ -1,25 +1,15 @@
 'use server';
 
-import { auth } from '@clerk/nextjs/server';
+import { getUserByClerkId } from '@/utils/auth';
+import db from '@/utils/db';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import db from '@/utils/db';
 
 export async function createEntry(formData: FormData) {
-  const { userId } = await auth();
-
+  const user = await getUserByClerkId();
+  const userId = user?.id;
   try {
     if (!userId) {
-      return;
-    }
-
-    const user = await db.user.findUnique({
-      where: {
-        clerkId: userId,
-      },
-    });
-
-    if (!user) {
       return;
     }
 
@@ -30,7 +20,7 @@ export async function createEntry(formData: FormData) {
       data: {
         title,
         content,
-        userId: user.id,
+        userId,
       },
     });
   } catch (error) {
@@ -43,20 +33,11 @@ export async function createEntry(formData: FormData) {
 }
 
 export async function updateEntry(formData: FormData) {
-  const { userId } = await auth();
+  const user = await getUserByClerkId();
+  const userId = user?.id;
 
   try {
     if (!userId) {
-      return;
-    }
-
-    const user = await db.user.findUnique({
-      where: {
-        clerkId: userId,
-      },
-    });
-
-    if (!user) {
       return;
     }
 
@@ -67,10 +48,11 @@ export async function updateEntry(formData: FormData) {
     const existingEntry = await db.entry.findUnique({
       where: {
         id,
+        userId,
       },
     });
 
-    if (!existingEntry || existingEntry.userId !== user.id) {
+    if (!existingEntry) {
       throw new Error('Entry not found or not authorized.');
     }
 

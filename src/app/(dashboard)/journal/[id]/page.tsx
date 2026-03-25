@@ -20,11 +20,9 @@ export default async function Page({ params }: { params: { id: string } }) {
   const userId = user?.id;
 
   let entry = null;
-  let error = null;
 
   try {
     if (!userId) {
-      error = 'Unauthorized';
       throw new Error('User not authenticated');
     }
     entry = await db.entry.findUnique({
@@ -36,16 +34,11 @@ export default async function Page({ params }: { params: { id: string } }) {
         analisis: true,
       },
     });
-
-    if (!entry) {
-      error = 'Entry not found';
-    }
   } catch (err) {
     console.error('Error fetching entry:', err);
-    error = 'Failed to load entry';
   }
 
-  if (error) {
+  if (!entry) {
     return (
       <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100 p-6">
         <div className="max-w-2xl mx-auto">
@@ -55,7 +48,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             ← Back to Journal
           </Link>
           <div className="bg-white rounded-lg shadow-sm p-8 border border-slate-200">
-            <p className="text-slate-600 text-center text-lg">{error}</p>
+            <p className="text-slate-600 text-center text-lg">Entry not found or not authorized.</p>
           </div>
         </div>
       </div>
