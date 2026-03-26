@@ -1,5 +1,5 @@
 'use client';
-import { Loader, LoaderCircle } from 'lucide-react';
+import { Loader } from 'lucide-react';
 import { useFormStatus } from 'react-dom';
 
 export default function SubmitButton({ text }: { text: string }) {

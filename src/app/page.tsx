@@ -1,5 +1,5 @@
 import { auth } from '@clerk/nextjs/server';
-import { Sparkles, ArrowRight, Shield, Zap, Smile } from 'lucide-react';
+import { ArrowRight, Zap, Shapes, BrainCircuit, PiggyBank, CloudSun } from 'lucide-react';
 import Link from 'next/link';
 
 export default async function Home() {
@@ -12,9 +12,11 @@ export default async function Home() {
       <nav className="max-w-7xl mx-auto px-6 py-8 flex justify-between items-center">
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-200">
-            <Sparkles className="text-white w-6 h-6" />
+            <CloudSun className="text-white w-6 h-6" />
           </div>
-          <span className="text-2xl font-black tracking-tight text-blue-600">MOOD</span>
+          <span className="text-2xl font-black tracking-tight bg-clip-text text-transparent bg-linear-to-r from-blue-500 to-purple-500">
+            MOOD
+          </span>
         </div>
         <Link href={link}>
           <button className="px-6 py-2.5 bg-gray-900 text-white font-semibold rounded-full hover:bg-gray-800 transition-all active:scale-95 shadow-lg shadow-gray-200">
@@ -31,12 +33,19 @@ export default async function Home() {
               <Zap size={14} />
               <span>v1.0 is now live</span>
             </div>
-            <h1 className="text-6xl md:text-7xl font-black leading-[1.1] tracking-tight text-gray-900">
-              Track your <span className="text-blue-600">mood</span>, <br />
-              shape your life.
-            </h1>
+            <div>
+              <h1 className="text-6xl md:text-7xl font-black leading-[1.1] tracking-tight text-gray-900">
+                Track your <br />
+                <span className="tracking-tight bg-clip-text text-transparent bg-linear-to-r from-blue-500 to-purple-500 pr-1">
+                  MOOD
+                </span>{' '}
+                <br />
+                shape your life.
+              </h1>
+            </div>
+
             <p className="text-xl text-gray-500 leading-relaxed max-w-lg">
-              The simplest way to keep track of your thoughts and feelings. Beautiful, private, and always with you.
+              The simplest way to keep track of your thoughts and feelings. Fast, simple, free and always with you.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
@@ -46,9 +55,11 @@ export default async function Home() {
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
               </Link>
-              <button className="w-full sm:w-auto px-10 py-4 bg-white text-gray-700 font-bold rounded-2xl border-2 border-gray-100 hover:border-gray-200 transition-all">
-                Learn More
-              </button>
+              <Link href="/learn-more">
+                <button className="w-full sm:w-auto px-10 py-4 bg-white text-gray-700 font-bold rounded-2xl border-2 border-gray-100 hover:border-gray-200 transition-all">
+                  Learn More
+                </button>
+              </Link>
             </div>
           </div>
 
@@ -57,10 +68,10 @@ export default async function Home() {
             <div className="relative bg-white p-8 rounded-[2.5rem] shadow-2xl border border-gray-100">
               <div className="grid grid-cols-2 gap-6">
                 {[
-                  { icon: Shield, title: 'Private', color: 'text-emerald-500', bg: 'bg-emerald-50' },
-                  { icon: Smile, title: 'Simple', color: 'text-amber-500', bg: 'bg-amber-50' },
                   { icon: Zap, title: 'Fast', color: 'text-blue-500', bg: 'bg-blue-50' },
-                  { icon: Sparkles, title: 'Insights', color: 'text-purple-500', bg: 'bg-purple-50' },
+                  { icon: Shapes, title: 'Simple', color: 'text-amber-500', bg: 'bg-amber-50' },
+                  { icon: BrainCircuit, title: 'AI Insights', color: 'text-purple-500', bg: 'bg-purple-50' },
+                  { icon: PiggyBank, title: 'Free', color: 'text-emerald-500', bg: 'bg-emerald-50' },
                 ].map((feature, i) => (
                   <div
                     key={i}
