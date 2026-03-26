@@ -51,6 +51,8 @@ export const getAiAnswerAboutDB = async (question: string) => {
       Here is the user's journal data: ${entriesContext}
 
       Use this data to answer the user's question accurately.
+     Focus on events and mood and their patterns.
+ Format answer to not use special character or markdown convention. Answer like in email.
       Today's date is ${new Date().toLocaleDateString()}.
     `,
     prompt: question,
