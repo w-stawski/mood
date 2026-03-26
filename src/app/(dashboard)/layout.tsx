@@ -1,11 +1,12 @@
 import Logo from '@/components/Logo';
 import { UserButton } from '@clerk/nextjs';
-import { Home, NotebookPen } from 'lucide-react';
+import { ChartNoAxesCombined, Home, NotebookPen } from 'lucide-react';
 import Link from 'next/link';
 
 const links = [
   { href: '/', label: 'Home', icon: Home },
   { href: '/journal', label: 'Journal', icon: NotebookPen },
+  { href: '/chart', label: 'Chart', icon: ChartNoAxesCombined },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {

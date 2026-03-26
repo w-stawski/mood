@@ -40,6 +40,7 @@ export async function createEntry(formData: FormData) {
   }
 
   revalidatePath('/journal');
+  revalidatePath('/chart');
   redirect('/journal');
 }
 
@@ -92,6 +93,7 @@ export async function updateEntryOnFormSubmit(formData: FormData) {
   }
 
   revalidatePath('/journal');
+  revalidatePath('/chart');
   redirect('/journal');
 }
 
