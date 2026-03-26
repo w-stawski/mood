@@ -31,15 +31,12 @@ export default async function Home() {
               <Zap size={14} />
               <span>v1.0 is now live</span>
             </div>
-            
             <h1 className="text-6xl md:text-7xl font-black leading-[1.1] tracking-tight text-gray-900">
               Track your <span className="text-blue-600">mood</span>, <br />
               shape your life.
             </h1>
-            
             <p className="text-xl text-gray-500 leading-relaxed max-w-lg">
-              The simplest way to keep track of your thoughts and feelings. 
-              Beautiful, private, and always with you.
+              The simplest way to keep track of your thoughts and feelings. Beautiful, private, and always with you.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
@@ -65,8 +62,11 @@ export default async function Home() {
                   { icon: Zap, title: 'Fast', color: 'text-blue-500', bg: 'bg-blue-50' },
                   { icon: Sparkles, title: 'Insights', color: 'text-purple-500', bg: 'bg-purple-50' },
                 ].map((feature, i) => (
-                  <div key={i} className="p-6 rounded-3xl bg-gray-50 hover:bg-white hover:shadow-xl transition-all border border-transparent hover:border-gray-100 group">
-                    <div className={`w-12 h-12 ${feature.bg} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                  <div
+                    key={i}
+                    className="p-6 rounded-3xl bg-gray-50 hover:bg-white hover:shadow-xl transition-all border border-transparent hover:border-gray-100 group">
+                    <div
+                      className={`w-12 h-12 ${feature.bg} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                       <feature.icon className={`w-6 h-6 ${feature.color}`} />
                     </div>
                     <h3 className="font-bold text-lg">{feature.title}</h3>

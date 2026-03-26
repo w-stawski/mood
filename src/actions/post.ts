@@ -6,6 +6,7 @@ import db from '@/utils/db';
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { after } from 'next/server';
 
 export async function createEntry(formData: FormData) {
   const user = await getUserByClerkId();
@@ -24,7 +25,14 @@ export async function createEntry(formData: FormData) {
         userId,
       },
     });
-    genAndAddAiSummary(content, id, userId);
+    after(async () => {
+      try {
+        await genAndAddAiSummary(content, id, userId);
+      } catch (error) {
+        console.log('failed while AI update', error);
+        throw new Error('AI entry update failed');
+      }
+    });
   } catch (error) {
     console.error('Error creating entry:', error);
     throw new Error('Failed to create entry. Please try again.');
@@ -34,7 +42,7 @@ export async function createEntry(formData: FormData) {
   redirect('/journal');
 }
 
-export async function updateEntryonFormSubmit(formData: FormData) {
+export async function updateEntryOnFormSubmit(formData: FormData) {
   const user = await getUserByClerkId();
   const userId = user?.id;
 
@@ -67,6 +75,15 @@ export async function updateEntryonFormSubmit(formData: FormData) {
         content,
       },
     });
+
+    after(async () => {
+      try {
+        await genAndAddAiSummary(content, id, userId);
+      } catch (error) {
+        console.log('failed while AI update', error);
+        throw new Error('AI entry update failed');
+      }
+    });
   } catch (error) {
     console.error('Error updating entry:', error);
     throw new Error('Failed to update entry. Please try again.');
@@ -98,17 +115,15 @@ export async function updateEntryAiFeedback(
     }
 
     const { summary, mood, feedback } = aiFeedback;
-
     await db.entry.update({
       where: {
         id,
       },
       data: {
         analysis: {
-          create: {
-            summary,
-            mood,
-            feedback,
+          upsert: {
+            create: { summary, mood, feedback },
+            update: { summary, mood, feedback },
           },
         },
       },

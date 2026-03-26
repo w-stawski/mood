@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import EntryCard from '@/components/EntryCard';
-import { getEntries } from '@/utils/helpers';
+import { getEntries } from '@/utils/db-helpers';
 import { PlusCircle } from 'lucide-react';
 
 export default async function Page() {
@@ -21,16 +21,12 @@ export default async function Page() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {entries?.map((entry) => (
           <Link key={entry.id} href={`/journal/${entry.id}`}>
-            <EntryCard
-              title={entry.title}
-              content={entry.analysis?.summary || entry.content}
-              createdAt={entry.createdAt}
-            />
+            <EntryCard title={entry.title} content={entry.content} createdAt={entry.createdAt} />
           </Link>
         ))}
       </div>
 
-      {(!entries || entries.length === 0) && (
+      {!entries?.length && (
         <div className="text-center py-20 bg-white rounded-xl border border-dashed border-gray-300">
           <p className="text-gray-500 text-lg">No journal entries yet. Start by creating one!</p>
           <Link href="/journal/new" className="mt-4 inline-block text-blue-600 font-medium hover:underline">

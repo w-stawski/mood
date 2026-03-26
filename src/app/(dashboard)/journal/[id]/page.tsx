@@ -1,6 +1,6 @@
 import Editor from '@/components/Editor';
 import { getUserByClerkId } from '@/utils/auth';
-import db from '@/utils/db';
+import { getEntry } from '@/utils/db-helpers';
 import Link from 'next/link';
 
 export default async function Page({ params }: { params: { id: string } }) {
@@ -8,24 +8,11 @@ export default async function Page({ params }: { params: { id: string } }) {
   const user = await getUserByClerkId();
   const userId = user?.id;
 
-  let entry = null;
-
-  try {
-    if (!userId) {
-      throw new Error('User not authenticated');
-    }
-    entry = await db.entry.findUnique({
-      where: {
-        id,
-        userId,
-      },
-      include: {
-        analysis: true,
-      },
-    });
-  } catch (err) {
-    console.error('Error fetching entry:', err);
+  if (!userId) {
+    throw new Error('User not authenticated');
   }
+
+  const entry = await getEntry(id, userId);
 
   if (!entry) {
     return (

@@ -1,9 +1,15 @@
-export default function EntryCard({ title, content, createdAt }: { title: string; content: string; createdAt: Date }) {
+export default function EntryCard({
+  title,
+  content,
+  createdAt,
+}: {
+  title: string;
+  content: string;
+  createdAt: string;
+}) {
   return (
     <div className="group bg-white shadow-sm hover:shadow-md rounded-xl p-6 border border-gray-200 transition-all duration-200 hover:border-blue-300 h-64 flex flex-col">
-      <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">
-        {createdAt.toLocaleDateString()}
-      </span>
+      <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">{createdAt}</span>
       <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
         {title}
       </h2>

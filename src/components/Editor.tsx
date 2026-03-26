@@ -1,33 +1,39 @@
-import { updateEntryonFormSubmit } from '@/actions/post';
+import { createEntry, updateEntryOnFormSubmit } from '@/actions/post';
 import { Entry } from '@/generated/prisma/client';
+import { formatDate } from '@/utils/date';
 import Link from 'next/link';
+import SubmitButton from './SubmitButton';
 
-function formatDate(date: Date | null | undefined): string {
-  if (!date) return '';
-  return new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-}
+export default function Editor({ entry }: { entry?: Entry }) {
+  let title = 'Create New Entry';
+  let createdAt = '';
+  let editedAt = '';
+  let saveButtonText = 'Create Entry';
 
-export default function Editor({ entry }: { entry: Entry }) {
+  if (entry) {
+    title = 'Edit Journal Entry';
+    createdAt = formatDate(entry.createdAt);
+    editedAt = formatDate(entry.updatedAt);
+    saveButtonText = 'Update Entry';
+  }
+
   return (
     <article className="bg-white rounded-lg shadow-md overflow-hidden">
-      {/* Header Section */}
       <div className="border-b border-slate-200 px-8 py-6">
-        <h1 className="text-4xl font-bold text-slate-900 mb-2">Edit Journal Entry</h1>
+        <h1 className="text-4xl font-bold text-slate-900 mb-2">{title}</h1>
         <div className="flex flex-wrap gap-4 text-sm text-slate-500">
-          <time dateTime={entry?.createdAt?.toISOString()}>Created {formatDate(entry?.createdAt)}</time>
-          {entry?.updatedAt && entry?.updatedAt !== entry?.createdAt && (
-            <time dateTime={entry?.updatedAt?.toISOString()}>Updated {formatDate(entry?.updatedAt)}</time>
+          {entry ? (
+            <>
+              <time dateTime={createdAt}>Created {createdAt}</time>
+              <time dateTime={editedAt}>Edited {editedAt}</time>
+            </>
+          ) : (
+            <p className="text-gray-500">Share what&apos;s on your mind today.</p>
           )}
         </div>
       </div>
 
-      <form className="p-8 space-y-6" action={updateEntryonFormSubmit}>
+      <form className="p-8 space-y-6" action={entry ? updateEntryOnFormSubmit : createEntry}>
         {/* is it safe? */}
         <input type="hidden" name="id" value={entry?.id} />
         <div>
@@ -61,11 +67,7 @@ export default function Editor({ entry }: { entry: Entry }) {
           <Link href="/journal" className="text-sm text-slate-600 hover:text-slate-900">
             Cancel
           </Link>
-          <button
-            type="submit"
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-all">
-            Save Changes
-          </button>
+          <SubmitButton text={saveButtonText} />
         </div>
       </form>
     </article>
