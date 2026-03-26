@@ -2,7 +2,7 @@
 import { Loader } from 'lucide-react';
 import { useFormStatus } from 'react-dom';
 
-export default function SubmitButton({ text }: { text: string }) {
+export default function SubmitButton({ text, pendingText }: { text: string; pendingText: string }) {
   const { pending } = useFormStatus();
   return (
     <button
@@ -13,8 +13,8 @@ export default function SubmitButton({ text }: { text: string }) {
         <>
           <span className="animate-spin">
             <Loader />
-          </span>{' '}
-          Saving...
+          </span>
+          {pendingText}
         </>
       ) : (
         text

@@ -1,3 +1,4 @@
+import Logo from '@/components/Logo';
 import { UserButton } from '@clerk/nextjs';
 import { Home, NotebookPen } from 'lucide-react';
 import Link from 'next/link';
@@ -11,12 +12,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen w-full bg-gray-50 overflow-hidden">
       {/* Sidebar */}
-      <aside className="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
-        <div className="p-6 border-b border-gray-100">
-          <h1 className="text-2xl font-bold text-blue-600">MOOD</h1>
-        </div>
+      <aside className="w-64 p-5 bg-white border-r border-gray-200 hidden md:flex flex-col">
+        <Logo />
 
-        <nav role="navigation" className="flex-1 p-4 space-y-2">
+        <nav role="navigation" className="flex-1 mt-5 space-y-2">
           {links.map((link) => (
             <Link
               key={link.href}

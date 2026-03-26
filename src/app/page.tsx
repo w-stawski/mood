@@ -1,3 +1,4 @@
+import Logo from '@/components/Logo';
 import { auth } from '@clerk/nextjs/server';
 import { ArrowRight, Zap, Shapes, BrainCircuit, PiggyBank, CloudSun } from 'lucide-react';
 import Link from 'next/link';
@@ -10,14 +11,7 @@ export default async function Home() {
     <div className="min-h-screen bg-white text-gray-900 selection:bg-blue-100">
       {/* Navigation */}
       <nav className="max-w-7xl mx-auto px-6 py-8 flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-200">
-            <CloudSun className="text-white w-6 h-6" />
-          </div>
-          <span className="text-2xl font-black tracking-tight bg-clip-text text-transparent bg-linear-to-r from-blue-500 to-purple-500">
-            MOOD
-          </span>
-        </div>
+        <Logo />
         <Link href={link}>
           <button className="px-6 py-2.5 bg-gray-900 text-white font-semibold rounded-full hover:bg-gray-800 transition-all active:scale-95 shadow-lg shadow-gray-200">
             {userId ? 'Go to Dashboard' : 'Sign In'}

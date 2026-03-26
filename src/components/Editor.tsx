@@ -67,7 +67,7 @@ export default function Editor({ entry }: { entry?: Entry }) {
           <Link href="/journal" className="text-sm text-slate-600 hover:text-slate-900">
             Cancel
           </Link>
-          <SubmitButton text={saveButtonText} />
+          <SubmitButton text={saveButtonText} pendingText="Saving" />
         </div>
       </form>
     </article>

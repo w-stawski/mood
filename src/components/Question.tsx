@@ -15,12 +15,14 @@ export default function Question() {
           name="question"
           id="question"
           placeholder="Ask anything about your journal"
+          disabled={isPending}
           required
           className="w-full px-4 py-2 mr-3 rounded-lg border border-gray-300"
         />
-        <SubmitButton text={isPending ? 'Thinking...' : 'Ask'} />
+        <SubmitButton text={'Ask'} pendingText="Thinking" />
       </form>
-      {state && <p className="text-gray-700 bg-gray-50 p-3 rounded-lg">{state}</p>}
+      {isPending && <div className="my-5 animate-pulse bg-gray-200 h-15 w-full rounded-lg" />}
+      {!isPending && state && <p className="my-5">{state}</p>}
     </div>
   );
 }
