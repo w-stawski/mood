@@ -40,7 +40,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
         <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 md:hidden">
-          <h1 className="text-xl font-bold text-blue-600">MOOD</h1>
+          <Link href="/">
+            <h1 className="text-xl font-bold text-blue-600">MOOD</h1>
+          </Link>
           <UserButton />
         </header>
 
