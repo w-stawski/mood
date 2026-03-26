@@ -1,7 +1,8 @@
-import Link from 'next/link';
 import EntryCard from '@/components/EntryCard';
+import Question from '@/components/Question';
 import { getEntries } from '@/utils/db-helpers';
 import { PlusCircle } from 'lucide-react';
+import Link from 'next/link';
 
 export default async function Page() {
   const entries = await getEntries();
@@ -17,7 +18,7 @@ export default async function Page() {
           <span>New Entry</span>
         </Link>
       </header>
-
+      <Question />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {entries?.map((entry) => (
           <Link key={entry.id} href={`/journal/${entry.id}`}>

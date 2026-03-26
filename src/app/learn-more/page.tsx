@@ -141,7 +141,7 @@ export default async function LearnMore() {
                   <p className="text-gray-600 leading-relaxed">{step.description}</p>
                 </div>
                 {i < 2 && (
-                  <div className="hidden md:block absolute top-7 right-0 w-1/2 h-1 bg-gradient-to-r from-blue-300 to-transparent" />
+                  <div className="hidden md:block absolute top-7 right-0 w-1/2 h-1 bg-linear-to-r from-blue-300 to-transparent" />
                 )}
               </div>
             ))}

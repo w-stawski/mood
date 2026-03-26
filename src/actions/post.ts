@@ -1,6 +1,6 @@
 'use server';
 
-import { genAndAddAiSummary } from '@/utils/ai';
+import { genAndAddAiSummary as getAiFeedback } from '@/utils/ai';
 import { getUserByClerkId } from '@/utils/auth';
 import db from '@/utils/db';
 
@@ -27,7 +27,8 @@ export async function createEntry(formData: FormData) {
     });
     after(async () => {
       try {
-        await genAndAddAiSummary(content, id, userId);
+        const aiFeedback = await getAiFeedback(content);
+        await updateEntryAiFeedback(aiFeedback, id, userId);
       } catch (error) {
         console.log('failed while AI update', error);
         throw new Error('AI entry update failed');
@@ -78,7 +79,8 @@ export async function updateEntryOnFormSubmit(formData: FormData) {
 
     after(async () => {
       try {
-        await genAndAddAiSummary(content, id, userId);
+        const aiFeedback = await getAiFeedback(content);
+        await updateEntryAiFeedback(aiFeedback, id, userId);
       } catch (error) {
         console.log('failed while AI update', error);
         throw new Error('AI entry update failed');
