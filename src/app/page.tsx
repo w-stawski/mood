@@ -1,15 +1,13 @@
 import Logo from '@/components/Logo';
 import { auth } from '@clerk/nextjs/server';
-import { ArrowRight, Zap, Shapes, BrainCircuit, PiggyBank, CloudSun } from 'lucide-react';
+import { ArrowRight, Zap, Shapes, BrainCircuit, PiggyBank } from 'lucide-react';
 import Link from 'next/link';
-
 export default async function Home() {
   const { userId } = await auth();
   const link = userId ? '/journal' : '/sign-in';
 
   return (
     <div className="min-h-screen bg-white text-gray-900 selection:bg-blue-100">
-      {/* Navigation */}
       <nav className="max-w-7xl mx-auto px-6 py-8 flex justify-between items-center">
         <Logo />
         <Link href={link}>
@@ -19,7 +17,6 @@ export default async function Home() {
         </Link>
       </nav>
 
-      {/* Hero Section */}
       <main className="max-w-7xl mx-auto px-6 pt-20 pb-32">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
@@ -83,7 +80,6 @@ export default async function Home() {
         </div>
       </main>
 
-      {/* Footer */}
       <footer className="border-t border-gray-100 py-12">
         <div className="max-w-7xl mx-auto px-6 text-center text-gray-400 text-sm">
           © 2026 MOOD Journal. Built for personal reflection.

@@ -13,7 +13,7 @@ export default async function Page() {
       sentimentScore: item.mood,
     })) || [];
 
-  if (chartData.length === 0) {
+  if (!chartData.length) {
     return (
       <div className="p-8 text-center text-gray-500 bg-white rounded-lg shadow-sm border border-gray-100">
         <p className="text-lg">No analysis data available yet.</p>
