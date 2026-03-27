@@ -1,7 +1,6 @@
 'use server';
-import { AnalysisResponse } from '@/types';
+import { AnalysisResponse, AnalysisResponseSchema } from '@/types';
 import { generateText, Output } from 'ai';
-import z from 'zod';
 import { getUserByClerkId } from './auth';
 import db from './db';
 
@@ -14,11 +13,7 @@ export const genAndAddAiSummary = async (entry: string): Promise<AnalysisRespons
     prompt,
     system,
     output: Output.object({
-      schema: z.object({
-        summary: z.string(),
-        mood: z.number().min(1).max(10),
-        feedback: z.string(),
-      }),
+      schema: AnalysisResponseSchema,
     }),
   });
 

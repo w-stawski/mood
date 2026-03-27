@@ -1,42 +1,61 @@
-export type User = {
-  id: string;
-  clerkId: string;
-  email: string;
-  name: string;
-  createdAt: Date;
-  updatedAt: Date;
+import { z } from 'zod';
+
+// --- Base Schemas ---
+
+export const UserSchema = z.object({
+  id: z.uuid(),
+  clerkId: z.string(),
+  email: z.email(),
+  name: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export const AnalysisSchema = z.object({
+  id: z.uuid(),
+  entryId: z.uuid(),
+  summary: z.string(),
+  feedback: z.string(),
+  mood: z.number().min(1).max(10),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export const JournalEntrySchema = z.object({
+  id: z.string().uuid(),
+  title: z.string().min(1, 'Title is required'),
+  content: z.string().min(1, 'Content is required'),
+  userId: z.uuid(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  analysis: AnalysisSchema.nullable().optional(),
+});
+
+// --- Inferred Types ---
+
+export type User = z.infer<typeof UserSchema> & {
   entries?: JournalEntry[];
 };
 
-export type JournalEntry = {
-  id: string;
-  title: string;
-  content: string;
-  userId: string;
-  user?: User;
-  createdAt: Date;
-  updatedAt: Date;
-  analysis?: Analysis | null;
-};
+export type JournalEntry = z.infer<typeof JournalEntrySchema>;
 
-export type Analysis = {
-  id: string;
-  entryId: string;
+export type Analysis = z.infer<typeof AnalysisSchema> & {
   entry?: JournalEntry;
-  summary: string;
-  feedback: string;
-  mood: number;
-  createdAt: Date;
-  updatedAt: Date;
 };
 
-export type AnalysisResponse = {
-  summary: string;
-  mood: number;
-  feedback: string;
-};
+// --- Specialized Schemas and Types ---
 
-export type ChatMessage = {
-  role: 'user' | 'assistant';
-  content: string;
-};
+export const AnalysisResponseSchema = z.object({
+  summary: z.string(),
+  mood: z.number().min(1).max(10),
+  feedback: z.string(),
+});
+
+export type AnalysisResponse = z.infer<typeof AnalysisResponseSchema>;
+
+export const ChatMessageSchema = z.object({
+  role: z.enum(['user', 'assistant']),
+  content: z.string(),
+});
+
+export type ChatMessage = z.infer<typeof ChatMessageSchema>;
