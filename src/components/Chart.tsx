@@ -1,7 +1,7 @@
 'use client';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis } from 'recharts';
 
-const HistoryChart = ({ data }) => {
+const Chart = ({ data }: { data: { sentimentScore: number; displayDate: string }[] }) => {
   return (
     <div className="w-full h-80">
       <ResponsiveContainer width="100%" height="100%">
@@ -15,4 +15,4 @@ const HistoryChart = ({ data }) => {
   );
 };
 
-export default HistoryChart;
+export default Chart;
