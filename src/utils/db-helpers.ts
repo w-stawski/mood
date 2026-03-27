@@ -1,9 +1,15 @@
+import { Analysis, JournalEntry } from '@/types';
 import db from '@/utils/db';
 import { unstable_cache } from 'next/cache';
 import { getUserByClerkId } from './auth';
 import { formatDate } from './date';
 
-export const getEntries = async () => {
+export type JournalEntryWithFormattedDates = Omit<JournalEntry, 'createdAt' | 'updatedAt'> & {
+  createdAt: string;
+  updatedAt: string;
+};
+
+export const getEntries = async (): Promise<JournalEntryWithFormattedDates[] | null> => {
   const user = await getUserByClerkId();
   const userId = user?.id;
 
@@ -12,21 +18,21 @@ export const getEntries = async () => {
 };
 
 const getCachedEntries = (userId: string) =>
-  unstable_cache(async () => {
-    const resp = await db.entry.findMany({
+  unstable_cache(async (): Promise<JournalEntryWithFormattedDates[]> => {
+    const entries = await db.entry.findMany({
       where: { userId },
       include: { analysis: true },
       orderBy: { createdAt: 'desc' },
     });
 
-    return resp.map((entry) => ({
+    return entries.map((entry) => ({
       ...entry,
       createdAt: formatDate(entry.createdAt),
       updatedAt: formatDate(entry.updatedAt),
-    }));
+    })) as JournalEntryWithFormattedDates[];
   }, [`entries-${userId}`])();
 
-export const getAnalyses = async () => {
+export const getAnalyses = async (): Promise<Analysis[] | null> => {
   const user = await getUserByClerkId();
   const userId = user?.id;
 
@@ -35,18 +41,19 @@ export const getAnalyses = async () => {
 };
 
 const getCachedAnalyses = (userId: string) =>
-  unstable_cache(async () => {
-    const resp = await db.analysis.findMany({
+  unstable_cache(async (): Promise<Analysis[]> => {
+    const analyses = await db.analysis.findMany({
       where: { entry: { userId } },
       orderBy: { createdAt: 'desc' },
     });
 
-    return resp;
+    return analyses;
   }, [`analyses-${userId}`])();
 
-export const getEntry = async (entryId: string, userId: string) => {
-  return await db.entry.findUnique({
+export const getEntryById = async (entryId: string, userId: string): Promise<JournalEntry | null> => {
+  const entry = await db.entry.findUnique({
     where: { id: entryId, userId },
     include: { analysis: true },
   });
+  return entry as JournalEntry | null;
 };

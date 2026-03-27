@@ -1,9 +1,9 @@
 import Editor from '@/components/Editor';
 import { getUserByClerkId } from '@/utils/auth';
-import { getEntry } from '@/utils/db-helpers';
+import { getEntryById } from '@/utils/db-helpers';
 import Link from 'next/link';
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const user = await getUserByClerkId();
   const userId = user?.id;
@@ -12,7 +12,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     throw new Error('User not authenticated');
   }
 
-  const entry = await getEntry(id, userId);
+  const entry = await getEntryById(id, userId);
 
   if (!entry) {
     return (

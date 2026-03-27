@@ -1,5 +1,6 @@
 'use server';
 
+import { AnalysisResponse } from '@/types';
 import { genAndAddAiSummary as getAiFeedback } from '@/utils/ai';
 import { getUserByClerkId } from '@/utils/auth';
 import db from '@/utils/db';
@@ -8,7 +9,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { after } from 'next/server';
 
-export async function createEntry(formData: FormData) {
+export async function createEntry(formData: FormData): Promise<void> {
   const user = await getUserByClerkId();
   const userId = user?.id;
   try {
@@ -28,10 +29,11 @@ export async function createEntry(formData: FormData) {
     after(async () => {
       try {
         const aiFeedback = await getAiFeedback(content);
-        await updateEntryAiFeedback(aiFeedback, id, userId);
+        if (aiFeedback) {
+          await updateEntryAiFeedback(aiFeedback, id, userId);
+        }
       } catch (error) {
-        console.log('failed while AI update', error);
-        throw new Error('AI entry update failed');
+        console.error('failed while AI update', error);
       }
     });
   } catch (error) {
@@ -44,7 +46,7 @@ export async function createEntry(formData: FormData) {
   redirect('/journal');
 }
 
-export async function updateEntryOnFormSubmit(formData: FormData) {
+export async function updateEntryOnFormSubmit(formData: FormData): Promise<void> {
   const user = await getUserByClerkId();
   const userId = user?.id;
 
@@ -81,10 +83,11 @@ export async function updateEntryOnFormSubmit(formData: FormData) {
     after(async () => {
       try {
         const aiFeedback = await getAiFeedback(content);
-        await updateEntryAiFeedback(aiFeedback, id, userId);
+        if (aiFeedback) {
+          await updateEntryAiFeedback(aiFeedback, id, userId);
+        }
       } catch (error) {
-        console.log('failed while AI update', error);
-        throw new Error('AI entry update failed');
+        console.error('failed while AI update', error);
       }
     });
   } catch (error) {
@@ -98,42 +101,26 @@ export async function updateEntryOnFormSubmit(formData: FormData) {
 }
 
 export async function updateEntryAiFeedback(
-  aiFeedback: { summary: string; mood: number; feedback: string },
-  id: string,
-  userId: string,
-) {
+  aiFeedback: AnalysisResponse,
+  entryId: string,
+  userId: string
+): Promise<void> {
   try {
-    if (!id || !userId || !aiFeedback) {
-      return;
-    }
-
-    const existingEntry = await db.entry.findUnique({
+    await db.analysis.upsert({
       where: {
-        id,
-        userId,
+        entryId,
+      },
+      create: {
+        ...aiFeedback,
+        entryId,
+      },
+      update: {
+        ...aiFeedback,
       },
     });
-
-    if (!existingEntry) {
-      throw new Error('Entry not found or not authorized.');
-    }
-
-    const { summary, mood, feedback } = aiFeedback;
-    await db.entry.update({
-      where: {
-        id,
-      },
-      data: {
-        analysis: {
-          upsert: {
-            create: { summary, mood, feedback },
-            update: { summary, mood, feedback },
-          },
-        },
-      },
-    });
+    revalidatePath('/journal');
+    revalidatePath('/chart');
   } catch (error) {
-    console.error('Error updating entry:', error);
-    throw new Error('Failed to update entry. Please try again.');
+    console.error('Error updating AI feedback:', error);
   }
 }

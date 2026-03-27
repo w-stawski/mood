@@ -1,7 +1,12 @@
 'use client';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis } from 'recharts';
 
-const Chart = ({ data }: { data: { sentimentScore: number; displayDate: string }[] }) => {
+export interface ChartDataPoint {
+  sentimentScore: number;
+  displayDate: string;
+}
+
+const Chart = ({ data }: { data: ChartDataPoint[] }) => {
   return (
     <div className="w-full h-80">
       <ResponsiveContainer width="100%" height="100%">

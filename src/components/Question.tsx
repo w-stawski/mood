@@ -5,7 +5,7 @@ import { getAiAnswerAboutDBFromForm } from '@/utils/ai';
 import SubmitButton from './SubmitButton';
 
 export default function Question() {
-  const [state, action, isPending] = useActionState(getAiAnswerAboutDBFromForm, '');
+  const [state, action, isPending] = useActionState<string, FormData>(getAiAnswerAboutDBFromForm, '');
 
   return (
     <div className="space-y-3">

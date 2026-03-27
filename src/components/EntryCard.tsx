@@ -1,12 +1,7 @@
-export default function EntryCard({
-  title,
-  content,
-  createdAt,
-}: {
-  title: string;
-  content: string;
-  createdAt: string;
-}) {
+import { JournalEntryWithFormattedDates } from '@/utils/db-helpers';
+
+export default function EntryCard({ entry }: { entry: JournalEntryWithFormattedDates }) {
+  const { title, content, createdAt } = entry;
   return (
     <div className="group bg-white shadow-sm hover:shadow-md rounded-xl p-6 border border-gray-200 transition-all duration-200 hover:border-blue-300 h-64 flex flex-col">
       <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">{createdAt}</span>

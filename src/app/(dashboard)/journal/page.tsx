@@ -22,7 +22,7 @@ export default async function Page() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {entries?.map((entry) => (
           <Link key={entry.id} href={`/journal/${entry.id}`}>
-            <EntryCard title={entry.title} content={entry.content} createdAt={entry.createdAt} />
+            <EntryCard entry={entry} />
           </Link>
         ))}
       </div>

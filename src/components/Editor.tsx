@@ -1,10 +1,10 @@
 import { createEntry, updateEntryOnFormSubmit } from '@/actions/post';
-import { Entry } from '@/generated/prisma/client';
+import { JournalEntry } from '@/types';
 import { formatDate } from '@/utils/date';
 import Link from 'next/link';
 import SubmitButton from './SubmitButton';
 
-export default function Editor({ entry }: { entry?: Entry }) {
+export default function Editor({ entry }: { entry?: Partial<JournalEntry> & { id?: string } }) {
   let title = 'Create New Entry';
   let createdAt = '';
   let editedAt = '';
@@ -12,8 +12,8 @@ export default function Editor({ entry }: { entry?: Entry }) {
 
   if (entry) {
     title = 'Edit Journal Entry';
-    createdAt = formatDate(entry.createdAt);
-    editedAt = formatDate(entry.updatedAt);
+    if (entry.createdAt) createdAt = formatDate(entry.createdAt);
+    if (entry.updatedAt) editedAt = formatDate(entry.updatedAt);
     saveButtonText = 'Update Entry';
   }
 
