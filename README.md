@@ -16,18 +16,18 @@ A personal journaling web app with **AI-assisted mood insights**, mood **trends 
 
 ## Tech stack
 
-| Layer | Choice |
-|--------|--------|
-| Framework | **Next.js 16** (App Router, React 19, Turbopack dev) |
-| UI | **React 19**, **Tailwind CSS 4**, **Lucide** icons |
-| Compiler | **React Compiler** (`babel-plugin-react-compiler`) |
-| Auth | **Clerk** (`@clerk/nextjs`) |
-| Database | **PostgreSQL** (e.g. **Neon**) |
-| ORM | **Prisma 7** + **pg** adapter / connection pool |
-| AI | **Vercel AI SDK** (`ai`, `@ai-sdk/openai`, structured output + **Zod**) |
-| Charts | **Recharts** (dynamic import on chart route) |
-| Testing | **Vitest**, **Testing Library**, **MSW** |
-| Validation | **Zod** |
+| Layer      | Choice                                                                  |
+| ---------- | ----------------------------------------------------------------------- |
+| Framework  | **Next.js 16** (App Router, React 19, Turbopack dev)                    |
+| UI         | **React 19**, **Tailwind CSS 4**, **Lucide** icons                      |
+| Compiler   | **React Compiler** (`babel-plugin-react-compiler`)                      |
+| Auth       | **Clerk** (`@clerk/nextjs`)                                             |
+| Database   | **PostgreSQL** (e.g. **Neon**)                                          |
+| ORM        | **Prisma 7** + **pg** adapter / connection pool                         |
+| AI         | **Vercel AI SDK** (`ai`, `@ai-sdk/openai`, structured output + **Zod**) |
+| Charts     | **Recharts** (dynamic import on chart route)                            |
+| Testing    | **Vitest**, **Testing Library**, **MSW**                                |
+| Validation | **Zod**                                                                 |
 
 > **Note:** `drizzle-orm` / `drizzle-kit` are present in `package.json`; primary data access in app code is **Prisma**.
 
@@ -102,12 +102,12 @@ prisma/
 
 Create a `.env` in the project root (never commit secrets). Typical variables:
 
-| Variable | Purpose |
-|----------|---------|
-| `DATABASE_URL` | PostgreSQL URL for Prisma and `pg` |
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk browser key |
-| `CLERK_SECRET_KEY` | Clerk server key |
-| `OPENAI_API_KEY` | OpenAI for `ai` / `@ai-sdk/openai` |
+| Variable                            | Purpose                            |
+| ----------------------------------- | ---------------------------------- |
+| `DATABASE_URL`                      | PostgreSQL URL for Prisma and `pg` |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk browser key                  |
+| `CLERK_SECRET_KEY`                  | Clerk server key                   |
+| `OPENAI_API_KEY`                    | OpenAI for `ai` / `@ai-sdk/openai` |
 
 Use the exact names expected by [Clerk Next.js](https://clerk.com/docs/quickstarts/nextjs) and the [AI SDK](https://sdk.vercel.ai/docs) if your versions differ.
 
@@ -128,19 +128,13 @@ npm run dev
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Next dev server (Turbopack) |
-| `npm run build` | Production build |
-| `npm run start` | Production server |
-| `npm run lint` | ESLint |
-| `npm test` | Vitest |
-
----
-
-## Turbopack / monorepo note
-
-If a **parent directory** contains an extra `package-lock.json`, Next may infer the wrong workspace root and fail to resolve `tailwindcss`. This repo sets **`turbopack.root`** in `next.config.ts` to the directory that holds `package.json` and `node_modules`. Prefer **one lockfile per app** or keep that setting.
+| Command         | Description                 |
+| --------------- | --------------------------- |
+| `npm run dev`   | Next dev server (Turbopack) |
+| `npm run build` | Production build            |
+| `npm run start` | Production server           |
+| `npm run lint`  | ESLint                      |
+| `npm test`      | Vitest                      |
 
 ---
 
@@ -160,4 +154,4 @@ If a **parent directory** contains an extra `package-lock.json`, Next may infer 
 
 ## License
 
-Private project (`"private": true` in `package.json`). Add a license file if you open-source.
+Open source
