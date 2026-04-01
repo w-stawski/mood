@@ -12,6 +12,8 @@ import { after } from 'next/server';
 export async function createEntry(formData: FormData): Promise<void> {
   const user = await getUserByClerkId();
   const userId = user?.id;
+  let createdEntryId: string | undefined;
+
   try {
     if (!userId) {
       return;
@@ -37,6 +39,7 @@ export async function createEntry(formData: FormData): Promise<void> {
         userId,
       },
     });
+    createdEntryId = id;
     after(async () => {
       try {
         const aiFeedback = await getAiFeedback(content);
@@ -52,16 +55,21 @@ export async function createEntry(formData: FormData): Promise<void> {
     throw new Error('Failed to create entry. Please try again.');
   }
 
+  if (!userId || !createdEntryId) {
+    return;
+  }
+
   updateTag(entriesCacheTag(userId));
   updateTag(analysesCacheTag(userId));
   revalidatePath('/journal');
   revalidatePath('/chart');
-  redirect('/journal');
+  redirect(`/journal?insights=${createdEntryId}`);
 }
 
 export async function updateEntryOnFormSubmit(formData: FormData): Promise<void> {
   const user = await getUserByClerkId();
   const userId = user?.id;
+  let entryIdForRedirect: string | undefined;
 
   try {
     if (!userId) {
@@ -104,6 +112,8 @@ export async function updateEntryOnFormSubmit(formData: FormData): Promise<void>
       },
     });
 
+    entryIdForRedirect = id;
+
     after(async () => {
       try {
         const aiFeedback = await getAiFeedback(content);
@@ -119,11 +129,15 @@ export async function updateEntryOnFormSubmit(formData: FormData): Promise<void>
     throw new Error('Failed to update entry. Please try again.');
   }
 
+  if (!userId || !entryIdForRedirect) {
+    return;
+  }
+
   updateTag(entriesCacheTag(userId));
   updateTag(analysesCacheTag(userId));
   revalidatePath('/journal');
   revalidatePath('/chart');
-  redirect('/journal');
+  redirect(`/journal?insights=${entryIdForRedirect}`);
 }
 
 export async function updateEntryAiFeedback(

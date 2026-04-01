@@ -16,3 +16,24 @@
     background-position: 0% 50%;
   }
 }
+
+@keyframes toast-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes toast-slide-up {
+    from,
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
