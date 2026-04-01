@@ -2,8 +2,28 @@ import Editor from '@/components/Editor';
 import { getUserByClerkId } from '@/utils/auth';
 import { getEntryById } from '@/utils/db-helpers';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
-export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+function JournalEntryFallback() {
+  return (
+    <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100 p-6">
+      <div className="max-w-2xl mx-auto">
+        <div className="h-6 w-40 bg-slate-200 animate-pulse rounded mb-8" />
+        <div className="h-64 bg-white rounded-lg border border-slate-200 animate-pulse" />
+      </div>
+    </div>
+  );
+}
+
+export default function Page({ params }: { params: Promise<{ id: string }> }) {
+  return (
+    <Suspense fallback={<JournalEntryFallback />}>
+      <JournalEntryContent params={params} />
+    </Suspense>
+  );
+}
+
+async function JournalEntryContent({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const user = await getUserByClerkId();
   const userId = user?.id;

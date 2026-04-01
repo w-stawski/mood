@@ -1,8 +1,22 @@
 import { currentUser } from '@clerk/nextjs/server';
 import db from '@/utils/db';
 import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
 
-export default async function Page() {
+export default function Page() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="h-8 w-40 bg-gray-200 animate-pulse rounded" aria-hidden />
+        </div>
+      }>
+      <NewUserFlow />
+    </Suspense>
+  );
+}
+
+async function NewUserFlow() {
   const user = await currentUser();
   if (!user) {
     redirect('/sign-in');
@@ -30,3 +44,4 @@ export default async function Page() {
   redirect('/journal');
   return <div></div>;
 }
+

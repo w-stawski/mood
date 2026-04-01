@@ -1,8 +1,32 @@
 import Link from 'next/link';
 import { CloudSun, Zap, Smartphone, Brain, PiggyBank } from 'lucide-react';
 import { auth } from '@clerk/nextjs/server';
+import { Suspense } from 'react';
 
-export default async function LearnMore() {
+function LearnMoreFallback() {
+  return (
+    <div className="min-h-screen bg-white text-gray-900">
+      <nav className="max-w-7xl mx-auto px-6 py-8 flex justify-between items-center">
+        <div className="h-10 w-32 bg-gray-100 animate-pulse rounded-xl" />
+        <div className="h-10 w-28 bg-gray-100 animate-pulse rounded-full" />
+      </nav>
+      <div className="max-w-7xl mx-auto px-6 py-20">
+        <div className="h-14 w-3/4 max-w-lg bg-gray-100 animate-pulse rounded mb-6" />
+        <div className="h-24 bg-gray-50 animate-pulse rounded" />
+      </div>
+    </div>
+  );
+}
+
+export default function LearnMore() {
+  return (
+    <Suspense fallback={<LearnMoreFallback />}>
+      <LearnMoreContent />
+    </Suspense>
+  );
+}
+
+async function LearnMoreContent() {
   const { userId } = await auth();
   const ctaLink = userId ? '/journal' : '/sign-in';
 
@@ -158,3 +182,4 @@ export default async function LearnMore() {
     </div>
   );
 }
+

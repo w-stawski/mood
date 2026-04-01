@@ -43,7 +43,10 @@ export default function Home() {
     <div className="min-h-screen bg-white text-gray-900 selection:bg-blue-100">
       <nav className="max-w-7xl mx-auto px-6 py-8 flex justify-between items-center">
         <Logo />
-        <Suspense fallback={<div className="w-32 h-11 bg-gray-100 animate-pulse rounded-full" />}>
+        <Suspense
+          fallback={
+            <div className="w-32 h-11 bg-gray-100 animate-pulse rounded-full" />
+          }>
           <NavButton />
         </Suspense>
       </nav>

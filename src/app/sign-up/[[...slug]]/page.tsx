@@ -1,4 +1,5 @@
 import { SignUp } from '@clerk/nextjs';
+import { Suspense } from 'react';
 
 export default function Page() {
   return (
@@ -8,7 +9,9 @@ export default function Page() {
         <p className="text-gray-500">Join us to start tracking your thoughts.</p>
       </div>
       <div className="w-full max-w-md bg-white p-2 rounded-2xl shadow-xl shadow-blue-100/50">
-        <SignUp />
+        <Suspense fallback={<div className="h-96 animate-pulse rounded-xl bg-gray-50" aria-hidden />}>
+          <SignUp />
+        </Suspense>
       </div>
     </div>
   );

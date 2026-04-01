@@ -1,11 +1,11 @@
 'use server';
 
 import { AnalysisResponse, JournalEntrySchema } from '@/types';
+import { analysesCacheTag, entriesCacheTag } from '@/utils/db-helpers';
 import { genAndAddAiSummary as getAiFeedback } from '@/utils/ai';
 import { getUserByClerkId } from '@/utils/auth';
 import db from '@/utils/db';
-
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { after } from 'next/server';
 
@@ -41,7 +41,7 @@ export async function createEntry(formData: FormData): Promise<void> {
       try {
         const aiFeedback = await getAiFeedback(content);
         if (aiFeedback) {
-          await updateEntryAiFeedback(aiFeedback, id);
+          await updateEntryAiFeedback(aiFeedback, id, userId);
         }
       } catch (error) {
         console.error('failed while AI update', error);
@@ -52,6 +52,8 @@ export async function createEntry(formData: FormData): Promise<void> {
     throw new Error('Failed to create entry. Please try again.');
   }
 
+  updateTag(entriesCacheTag(userId));
+  updateTag(analysesCacheTag(userId));
   revalidatePath('/journal');
   revalidatePath('/chart');
   redirect('/journal');
@@ -106,7 +108,7 @@ export async function updateEntryOnFormSubmit(formData: FormData): Promise<void>
       try {
         const aiFeedback = await getAiFeedback(content);
         if (aiFeedback) {
-          await updateEntryAiFeedback(aiFeedback, id);
+          await updateEntryAiFeedback(aiFeedback, id, userId);
         }
       } catch (error) {
         console.error('failed while AI update', error);
@@ -117,6 +119,8 @@ export async function updateEntryOnFormSubmit(formData: FormData): Promise<void>
     throw new Error('Failed to update entry. Please try again.');
   }
 
+  updateTag(entriesCacheTag(userId));
+  updateTag(analysesCacheTag(userId));
   revalidatePath('/journal');
   revalidatePath('/chart');
   redirect('/journal');
@@ -125,6 +129,7 @@ export async function updateEntryOnFormSubmit(formData: FormData): Promise<void>
 export async function updateEntryAiFeedback(
   aiFeedback: AnalysisResponse,
   entryId: string,
+  userId: string,
 ): Promise<void> {
   try {
     await db.analysis.upsert({
@@ -139,6 +144,8 @@ export async function updateEntryAiFeedback(
         ...aiFeedback,
       },
     });
+    updateTag(entriesCacheTag(userId));
+    updateTag(analysesCacheTag(userId));
     revalidatePath('/journal');
     revalidatePath('/chart');
   } catch (error) {

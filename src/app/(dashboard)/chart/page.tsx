@@ -1,7 +1,30 @@
-import Chart, { ChartDataPoint } from '@/components/Chart';
+import type { ChartDataPoint } from '@/components/Chart';
 import { getAnalyses } from '@/utils/db-helpers';
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
 
-export default async function Page() {
+const Chart = dynamic(() => import('@/components/Chart'), {
+  loading: () => <div className="h-80 animate-pulse rounded-lg bg-gray-100" aria-hidden />,
+});
+
+function ChartPageFallback() {
+  return (
+    <div className="p-8 bg-white rounded-xl shadow-sm border border-gray-100">
+      <div className="h-9 w-48 bg-gray-200 animate-pulse rounded mb-8" />
+      <div className="h-80 animate-pulse rounded-lg bg-gray-100" aria-hidden />
+    </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<ChartPageFallback />}>
+      <ChartPage />
+    </Suspense>
+  );
+}
+
+async function ChartPage() {
   const data = await getAnalyses();
   const chartData: ChartDataPoint[] =
     data?.map((item) => ({

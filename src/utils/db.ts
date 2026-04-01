@@ -3,7 +3,8 @@ import { Pool } from 'pg';
 import { PrismaClient } from '@/generated/prisma/client';
 
 const connectionString = process.env.DATABASE_URL;
-const pool = new Pool({ connectionString });
+// Single connection per serverless invocation avoids exhausting Neon/Postgres pools on cold starts.
+const pool = new Pool({ connectionString, max: 1 });
 const adapter = new PrismaPg(pool as any);
 
 const prismaClientSingleton = () => {

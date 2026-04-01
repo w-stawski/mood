@@ -1,6 +1,6 @@
 import { Analysis, JournalEntry } from '@/types';
 import db from '@/utils/db';
-import { unstable_cache } from 'next/cache';
+import { cacheLife, cacheTag } from 'next/cache';
 import { getUserByClerkId } from './auth';
 import { formatDate } from './date';
 
@@ -8,6 +8,10 @@ export type JournalEntryWithFormattedDates = Omit<JournalEntry, 'createdAt' | 'u
   createdAt: string;
   updatedAt: string;
 };
+
+/** Invalidate with `updateTag` after writes so Data Cache matches DB on Vercel. */
+export const entriesCacheTag = (userId: string) => `user-entries-${userId}`;
+export const analysesCacheTag = (userId: string) => `user-analyses-${userId}`;
 
 export const getEntries = async (): Promise<JournalEntryWithFormattedDates[] | null> => {
   const user = await getUserByClerkId();
@@ -17,20 +21,23 @@ export const getEntries = async (): Promise<JournalEntryWithFormattedDates[] | n
   return getCachedEntries(userId);
 };
 
-const getCachedEntries = (userId: string) =>
-  unstable_cache(async (): Promise<JournalEntryWithFormattedDates[]> => {
-    const entries = await db.entry.findMany({
-      where: { userId },
-      include: { analysis: true },
-      orderBy: { createdAt: 'desc' },
-    });
+async function getCachedEntries(userId: string): Promise<JournalEntryWithFormattedDates[]> {
+  'use cache';
+  cacheTag(entriesCacheTag(userId));
+  cacheLife('max');
 
-    return entries.map((entry) => ({
-      ...entry,
-      createdAt: formatDate(entry.createdAt),
-      updatedAt: formatDate(entry.updatedAt),
-    })) as JournalEntryWithFormattedDates[];
-  }, [`entries-${userId}`])();
+  const entries = await db.entry.findMany({
+    where: { userId },
+    include: { analysis: true },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  return entries.map((entry) => ({
+    ...entry,
+    createdAt: formatDate(entry.createdAt),
+    updatedAt: formatDate(entry.updatedAt),
+  })) as JournalEntryWithFormattedDates[];
+}
 
 export const getAnalyses = async (): Promise<Analysis[] | null> => {
   const user = await getUserByClerkId();
@@ -40,15 +47,18 @@ export const getAnalyses = async (): Promise<Analysis[] | null> => {
   return getCachedAnalyses(userId);
 };
 
-const getCachedAnalyses = (userId: string) =>
-  unstable_cache(async (): Promise<Analysis[]> => {
-    const analyses = await db.analysis.findMany({
-      where: { entry: { userId } },
-      orderBy: { createdAt: 'desc' },
-    });
+async function getCachedAnalyses(userId: string): Promise<Analysis[]> {
+  'use cache';
+  cacheTag(analysesCacheTag(userId));
+  cacheLife('max');
 
-    return analyses;
-  }, [`analyses-${userId}`])();
+  const analyses = await db.analysis.findMany({
+    where: { entry: { userId } },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  return analyses;
+}
 
 export const getEntryById = async (entryId: string, userId: string): Promise<JournalEntry | null> => {
   const entry = await db.entry.findUnique({

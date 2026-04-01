@@ -3,8 +3,33 @@ import Question from '@/components/Question';
 import { getEntries } from '@/utils/db-helpers';
 import { PlusCircle } from 'lucide-react';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
-export default async function Page() {
+function JournalListFallback() {
+  return (
+    <div className="space-y-8">
+      <div className="flex justify-between items-center">
+        <div className="h-10 w-48 bg-gray-200 animate-pulse rounded" />
+        <div className="h-10 w-32 bg-gray-200 animate-pulse rounded-lg" />
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="h-40 bg-gray-100 animate-pulse rounded-xl" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<JournalListFallback />}>
+      <JournalList />
+    </Suspense>
+  );
+}
+
+async function JournalList() {
   const entries = await getEntries();
 
   return (
@@ -38,3 +63,4 @@ export default async function Page() {
     </div>
   );
 }
+
