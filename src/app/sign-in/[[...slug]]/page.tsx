@@ -1,5 +1,4 @@
-import { SignIn } from '@clerk/nextjs';
-import { Suspense } from 'react';
+import { ClerkSignInPanel } from './_components/clerk-sign-in-panel';
 
 export default function Page() {
   return (
@@ -9,9 +8,7 @@ export default function Page() {
         <p className="text-gray-500">Welcome back! Please sign in to continue.</p>
       </div>
       <div className="w-full max-w-md bg-white p-2 rounded-2xl shadow-xl shadow-blue-100/50">
-        <Suspense fallback={<div className="h-96 animate-pulse rounded-xl bg-gray-50" aria-hidden />}>
-          <SignIn />
-        </Suspense>
+        <ClerkSignInPanel />
       </div>
     </div>
   );

@@ -1,5 +1,4 @@
-import { SignUp } from '@clerk/nextjs';
-import { Suspense } from 'react';
+import { ClerkSignUpPanel } from './_components/clerk-sign-up-panel';
 
 export default function Page() {
   return (
@@ -9,9 +8,7 @@ export default function Page() {
         <p className="text-gray-500">Join us to start tracking your thoughts.</p>
       </div>
       <div className="w-full max-w-md bg-white p-2 rounded-2xl shadow-xl shadow-blue-100/50">
-        <Suspense fallback={<div className="h-96 animate-pulse rounded-xl bg-gray-50" aria-hidden />}>
-          <SignUp />
-        </Suspense>
+        <ClerkSignUpPanel />
       </div>
     </div>
   );
