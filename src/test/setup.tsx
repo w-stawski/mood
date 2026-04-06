@@ -1,5 +1,13 @@
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import { expect, vi } from 'vitest';
+import * as matchers from 'vitest-axe/matchers';
+import 'vitest-axe/extend-expect';
+
+expect.extend(matchers);
+
+// jsdom's canvas is partial and may throw; stub for axe.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(HTMLCanvasElement.prototype as any).getContext = () => null;
 
 // Mock Next.js router
 vi.mock('next/navigation', () => ({

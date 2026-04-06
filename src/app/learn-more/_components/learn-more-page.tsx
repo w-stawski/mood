@@ -23,28 +23,31 @@ export async function LearnMoreContent() {
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
-      <nav className="max-w-7xl mx-auto px-6 py-8 flex justify-between items-center">
+      <nav className="max-w-7xl mx-auto px-6 py-8 flex justify-between items-center" aria-label="Primary">
         <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-200">
-            <CloudSun className="text-white w-6 h-6" />
+            <CloudSun className="text-white w-6 h-6" aria-hidden="true" />
           </div>
           <span className="text-2xl font-black tracking-tight bg-clip-text text-transparent bg-linear-to-r from-blue-500 to-purple-500">
             MOOD
           </span>
         </Link>
         <div className="flex items-center gap-4">
-          <Link href="/">
-            <button className="text-gray-600 font-semibold hover:text-gray-900 transition-colors">Home</button>
+          <Link
+            href="/"
+            className="inline-flex min-h-11 items-center text-gray-600 font-semibold hover:text-gray-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded-lg px-2">
+            Home
           </Link>
-          <Link href={ctaLink}>
-            <button className="px-6 py-2.5 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition-all shadow-lg shadow-blue-100">
-              {userId ? 'Dashboard' : 'Get Started'}
-            </button>
+          <Link
+            href={ctaLink}
+            className="inline-flex min-h-11 items-center px-6 py-2.5 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition-all shadow-lg shadow-blue-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">
+            {userId ? 'Dashboard' : 'Get Started'}
           </Link>
         </div>
       </nav>
 
-      <section className="max-w-7xl mx-auto px-6 py-20 border-b border-gray-100">
+      <main id="main-content">
+        <section className="max-w-7xl mx-auto px-6 py-20 border-b border-gray-100">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <h1 className="text-5xl md:text-6xl font-black leading-tight text-gray-900">Understand Yourself Better</h1>
@@ -55,9 +58,9 @@ export async function LearnMoreContent() {
             </p>
           </div>
         </div>
-      </section>
+        </section>
 
-      <section className="max-w-7xl mx-auto px-6 py-20 border-b border-gray-100">
+        <section className="max-w-7xl mx-auto px-6 py-20 border-b border-gray-100">
         <div className="space-y-12">
           <div className="text-center space-y-4">
             <h2 className="text-4xl font-black text-gray-900">Powerful Features</h2>
@@ -105,7 +108,7 @@ export async function LearnMoreContent() {
                 className="p-8 rounded-2xl border border-gray-100 hover:border-gray-200 hover:shadow-lg transition-all group">
                 <div
                   className={`w-12 h-12 ${feature.bg} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                  <feature.icon className={`w-6 h-6 ${feature.color}`} />
+                  <feature.icon className={`w-6 h-6 ${feature.color}`} aria-hidden="true" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{feature.title}</h3>
                 <p className="text-gray-600 leading-relaxed">{feature.description}</p>
@@ -113,9 +116,9 @@ export async function LearnMoreContent() {
             ))}
           </div>
         </div>
-      </section>
+        </section>
 
-      <section className="max-w-7xl mx-auto px-6 py-20 border-b border-gray-100">
+        <section className="max-w-7xl mx-auto px-6 py-20 border-b border-gray-100">
         <div className="space-y-12">
           <div className="text-center space-y-4">
             <h2 className="text-4xl font-black text-gray-900">How It Works</h2>
@@ -158,13 +161,14 @@ export async function LearnMoreContent() {
             ))}
           </div>
         </div>
-      </section>
+        </section>
 
       <footer className="border-t border-gray-100 py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6 text-center text-gray-400 text-sm">
           © 2026 MOOD Journal. Building a healthier world through self-reflection.
         </div>
       </footer>
+      </main>
     </div>
   );
 }

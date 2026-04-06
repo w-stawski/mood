@@ -3,8 +3,10 @@ import { Suspense } from 'react';
 
 export default function Page() {
   return (
-    <Suspense fallback={<NewUserPageFallback />}>
-      <NewUserFlow />
-    </Suspense>
+    <main id="main-content">
+      <Suspense fallback={<NewUserPageFallback />}>
+        <NewUserFlow />
+      </Suspense>
+    </main>
   );
 }

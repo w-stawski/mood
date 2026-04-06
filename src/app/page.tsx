@@ -16,7 +16,7 @@ export default function Home() {
         </Suspense>
       </nav>
 
-      <main className="max-w-7xl mx-auto px-6 pt-20 pb-32">
+      <main id="main-content" className="max-w-7xl mx-auto px-6 pt-20 pb-32">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-bold border border-blue-100">

@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import EntryCard from './EntryCard';
 import { describe, it, expect } from 'vitest';
 import { JournalEntryWithFormattedDates } from '@/utils/db-helpers';
+import { expectNoA11yViolations } from '@/test/a11y';
 
 describe('EntryCard', () => {
   const mockEntry: JournalEntryWithFormattedDates = {
@@ -20,5 +21,10 @@ describe('EntryCard', () => {
     expect(screen.getByText('Test Entry')).toBeInTheDocument();
     expect(screen.getByText('This is a test journal entry content.')).toBeInTheDocument();
     expect(screen.getByText('March 27, 2026')).toBeInTheDocument();
+  });
+
+  it('has no obvious accessibility violations', async () => {
+    const { container } = render(<EntryCard entry={mockEntry} />);
+    await expectNoA11yViolations(container);
   });
 });

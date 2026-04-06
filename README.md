@@ -1,157 +1,97 @@
 # MOOD
 
-A personal journaling web app with **AI-assisted mood insights**, mood **trends charts**, and **Clerk** authentication. Built for fast iteration on **Next.js 16** (App Router, Cache Components) with **PostgreSQL** via **Prisma**.
+Open-source demo project: a journaling app with **AI-generated mood insights** and a **mood trends** chart.
 
----
+- **Live app**: `https://mood-chi-lac.vercel.app/`
+- **Status**: Work in progress (passion/learning project)
 
 ## Features
 
-- **Journal entries** — Create, edit, and list entries scoped per user.
-- **AI analysis** — After save, summaries, mood score (1–10), and short feedback are generated (OpenAI via Vercel AI SDK) and stored as `Analysis` rows.
-- **Dashboard** — Protected routes for journal, per-entry editor, and mood chart (Recharts).
-- **Onboarding** — `/new-user` syncs Clerk users into the local `User` table.
-- **Caching** — Server data uses `'use cache'`, `cacheTag` / `updateTag`, and partial prerendering-compatible `Suspense` boundaries.
+- Journal entries (create/edit/list)
+- Async AI analysis (summary, mood score, feedback)
+- Mood trends chart
+- Authentication via Clerk
 
----
+## Stack
 
-## Tech stack
+- Next.js 16 (App Router, Cache Components), React 19
+- Tailwind CSS 4
+- Postgres + Prisma
+- Vercel AI SDK + OpenAI
+- Testing: Vitest + Testing Library (+ axe checks), Playwright (smoke e2e)
 
-| Layer      | Choice                                                                  |
-| ---------- | ----------------------------------------------------------------------- |
-| Framework  | **Next.js 16** (App Router, React 19, Turbopack dev)                    |
-| UI         | **React 19**, **Tailwind CSS 4**, **Lucide** icons                      |
-| Compiler   | **React Compiler** (`babel-plugin-react-compiler`)                      |
-| Auth       | **Clerk** (`@clerk/nextjs`)                                             |
-| Database   | **PostgreSQL** (e.g. **Neon**)                                          |
-| ORM        | **Prisma 7** + **pg** adapter / connection pool                         |
-| AI         | **Vercel AI SDK** (`ai`, `@ai-sdk/openai`, structured output + **Zod**) |
-| Charts     | **Recharts** (dynamic import on chart route)                            |
-| Testing    | **Vitest**, **Testing Library**, **MSW**                                |
-| Validation | **Zod**                                                                 |
+## Local development
 
-> **Note:** `drizzle-orm` / `drizzle-kit` are present in `package.json`; primary data access in app code is **Prisma**.
+### Prerequisites
 
----
+- Node.js 20+
+- Postgres database
+- Clerk app (publishable + secret keys)
+- OpenAI API key
 
-## Architecture (high level)
-
-```mermaid
-flowchart LR
-  subgraph client [Browser]
-    Pages[App Router pages]
-    RSC[Server Components]
-    CC[Client components]
-  end
-
-  subgraph edge [Next.js]
-    MW[Clerk middleware]
-    SA[Server Actions]
-    Cache[Cache Components + use cache]
-  end
-
-  subgraph data [Data & AI]
-    PG[(PostgreSQL)]
-    OAI[OpenAI API]
-  end
-
-  Pages --> RSC
-  Pages --> CC
-  MW --> Pages
-  RSC --> Cache
-  Cache --> SA
-  SA --> PG
-  SA --> after[after callback]
-  after --> OAI
-  OAI --> PG
-```
-
-- **Routing** — `src/app` with route groups `(dashboard)` for authenticated shell (sidebar, nav).
-- **Auth** — `src/middleware.ts` protects non-public routes; public: `/`, sign-in/up, `/new-user`.
-- **Mutations** — `src/actions/post.ts` creates/updates entries, triggers **non-blocking** `after()` work for AI, then **`updateTag` / `revalidatePath`** so lists and chart stay consistent.
-- **Reads** — `src/utils/db-helpers.ts` and `src/utils/auth.ts` use cached loaders with **`cacheTag`** keyed by user for journal list / analyses / user row.
-- **Prisma client** — `src/utils/db.ts` singleton with a **small `pg` pool** (`max: 1`) suited to serverless-style invocations.
-
----
-
-## Repository layout
-
-```
-src/
-  app/                 # App Router: layouts, pages, route-private _components/
-  actions/             # Server Actions (posts, journal helpers)
-  components/          # Shared UI (Editor, Chart, cards, …)
-  generated/prisma/    # Generated Prisma client (see schema)
-  middleware.ts        # Clerk
-  utils/               # db, auth, db-helpers, ai, dates
-prisma/
-  schema.prisma        # User, Entry, Analysis
-```
-
----
-
-## Prerequisites
-
-- **Node.js** 20+ (aligned with `@types/node`)
-- **PostgreSQL** connection string
-- **Clerk** application (publishable + secret keys)
-- **OpenAI** API key (for AI analysis and optional Q&A features)
-
----
-
-## Environment variables
-
-Create a `.env` in the project root (never commit secrets). Typical variables:
-
-| Variable                            | Purpose                            |
-| ----------------------------------- | ---------------------------------- |
-| `DATABASE_URL`                      | PostgreSQL URL for Prisma and `pg` |
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk browser key                  |
-| `CLERK_SECRET_KEY`                  | Clerk server key                   |
-| `OPENAI_API_KEY`                    | OpenAI for `ai` / `@ai-sdk/openai` |
-
-Use the exact names expected by [Clerk Next.js](https://clerk.com/docs/quickstarts/nextjs) and the [AI SDK](https://sdk.vercel.ai/docs) if your versions differ.
-
----
-
-## Setup
+### Install
 
 ```bash
 npm install
-npx prisma migrate dev          # or db push in early development
+```
+
+### Configure environment
+
+Create `.env` (never commit secrets):
+
+- `DATABASE_URL`
+- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
+- `CLERK_SECRET_KEY`
+- `OPENAI_API_KEY`
+
+Optional Clerk URLs (recommended):
+
+- `NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in`
+- `NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up`
+- `NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL=/new-user`
+- `NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL=/new-user`
+
+### Database
+
+```bash
+npx prisma migrate dev
+```
+
+### Run
+
+```bash
 npm run dev
 ```
 
-- **Develop:** [http://localhost:3000](http://localhost:3000)
-- **Prisma client:** Regenerated on `postinstall` (`prisma generate`).
+Open `http://localhost:3000`.
 
----
+## Local deployment (production mode)
 
-## Scripts
+```bash
+npm run build
+npm run start
+```
 
-| Command         | Description                 |
-| --------------- | --------------------------- |
-| `npm run dev`   | Next dev server (Turbopack) |
-| `npm run build` | Production build            |
-| `npm run start` | Production server           |
-| `npm run lint`  | ESLint                      |
-| `npm test`      | Vitest                      |
+## Tests
 
----
+```bash
+npm test
+```
 
-## Deployment
+Playwright (requires browser install once):
 
-- **Vercel** (or similar) with PostgreSQL (e.g. **Neon**), environment variables set, and Prisma migrations applied in CI or release step.
-- Ensure **Clerk** URLs and **OpenAI** billing/limits match production traffic.
+```bash
+npx playwright install
+npm run test:e2e
+```
 
----
+> For e2e, run the app first (`npm run dev`) or set `PLAYWRIGHT_BASE_URL`.
 
-## Security & privacy
+## Notes
 
-- All journal and analysis data is **scoped by authenticated user** in server actions and Prisma queries.
-- Do not expose `DATABASE_URL`, `CLERK_SECRET_KEY`, or `OPENAI_API_KEY` to the client.
-
----
+- Uses user-scoped cache tags + `updateTag()` to keep the journal list and chart consistent.
+- `turbopack.root` is pinned in `next.config.ts` to avoid wrong root inference when a parent folder contains an extra lockfile.
 
 ## License
 
-Open source
+MIT. See `LICENSE`.
