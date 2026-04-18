@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { genAndAddAiSummary, getAiAnswerAboutDB } from './ai';
 import { generateText } from 'ai';
+import db from './db';
 
 vi.mock('ai', () => ({
   generateText: vi.fn(),
@@ -49,6 +50,16 @@ describe('AI Utils', () => {
     const result = await getAiAnswerAboutDB('How was my week?');
 
     expect(result).toBe('AI answer based on journal entries.');
-    expect(generateText).toHaveBeenCalled();
+    expect(db.entry.findMany).toHaveBeenCalledWith({
+      where: { userId: 'user_123' },
+      include: { analysis: true },
+      orderBy: { createdAt: 'desc' },
+    });
+    expect(generateText).toHaveBeenCalledWith(
+      expect.objectContaining({
+        model: 'openai/gpt-4o',
+        prompt: 'How was my week?',
+      }),
+    );
   });
 });
