@@ -20,7 +20,7 @@ export default function Home() {
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-bold border border-blue-100">
-              <Zap size={14} />
+              <Zap size={14} aria-hidden="true" />
               <span>v1.0 is now live</span>
             </div>
             <div>
@@ -64,7 +64,7 @@ export default function Home() {
                     className="p-6 rounded-3xl bg-gray-50 hover:bg-white hover:shadow-xl transition-all border border-transparent hover:border-gray-100 group">
                     <div
                       className={`w-12 h-12 ${feature.bg} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                      <feature.icon className={`w-6 h-6 ${feature.color}`} />
+                      <feature.icon className={`w-6 h-6 ${feature.color}`} aria-hidden="true" />
                     </div>
                     <h3 className="font-bold text-lg">{feature.title}</h3>
                   </div>
@@ -76,7 +76,7 @@ export default function Home() {
       </main>
 
       <footer className="border-t border-gray-100 py-12">
-        <div className="max-w-7xl mx-auto px-6 text-center text-gray-400 text-sm">
+        <div className="max-w-7xl mx-auto px-6 text-center text-gray-500 text-sm">
           © 2026 MOOD Journal. Built for personal reflection.
         </div>
       </footer>

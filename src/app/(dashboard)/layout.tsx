@@ -16,14 +16,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <aside className="w-64 p-5 bg-white border-r border-gray-200 hidden md:flex flex-col">
         <Logo />
 
-        <nav role="navigation" className="flex-1 mt-5 space-y-2">
+        <nav aria-label="Primary navigation" className="flex-1 mt-5 space-y-2">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               aria-label={link.label}
               className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors group">
-              <link.icon className="w-5 h-5 text-gray-400 group-hover:text-blue-500" />
+              <link.icon className="w-5 h-5 text-gray-400 group-hover:text-blue-500" aria-hidden="true" />
               <span className="font-medium">{link.label}</span>
             </Link>
           ))}
