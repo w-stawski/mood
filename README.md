@@ -1,6 +1,6 @@
 # MOOD
 
-AI-assisted journaling app built with Next.js.  
+AI-assisted journaling app built with Next.js.
 Users can write entries, get asynchronous AI insights, and track mood trends over time.
 
 - Live app: `https://mood-chi-lac.vercel.app/`
@@ -112,7 +112,3 @@ npm run test:e2e
 - Keep app and database in the same region.
 - Use a pooled Postgres connection string when available.
 - Set required secrets in Vercel project environment variables.
-
-## License
-
-MIT. See `LICENSE`.
